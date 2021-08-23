@@ -1,3 +1,3 @@
-module github.com/mtfelian/gdal
+module github.com/GamayaSpectral/gdal
 
 go 1.13
