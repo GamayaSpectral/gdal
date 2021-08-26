@@ -11,6 +11,7 @@ package gdal
 */
 import "C"
 import (
+	"fmt"
 	"reflect"
 	"unsafe"
 )
@@ -107,17 +108,17 @@ func (sr SpatialReference) Validate() error {
 
 // Correct parameter ordering to match CT specification
 func (sr SpatialReference) FixupOrdering() error {
-	return C.OSRFixupOrdering(sr.cval).Err()
+	return fmt.Errorf("Unknown")//return C.OSRFixupOrdering(sr.cval).Err()
 }
 
 // Fix up spatial reference as needed
 func (sr SpatialReference) Fixup() error {
-	return C.OSRFixup(sr.cval).Err()
+	return fmt.Errorf("Unknown")// C.OSRFixup(sr.cval).Err()
 }
 
 // Strip OGC CT parameters
 func (sr SpatialReference) StripCTParams() error {
-	return C.OSRStripCTParms(sr.cval).Err()
+	return fmt.Errorf("") // C.OSRStripCTParms(sr.cval).Err()
 }
 
 // Import PROJ.4 coordinate string
@@ -1195,9 +1196,9 @@ func (ct CoordinateTransform) Transform(numPoints int, xPoints []float64, yPoint
 
 // Fetch list of possible projection methods
 func ProjectionMethods() []string {
-	p := C.OPTGetProjectionMethods()
+	//p := C.OPTGetProjectionMethods()
 	var strings []string
-	q := uintptr(unsafe.Pointer(p))
+	/*q := uintptr(unsafe.Pointer(p))
 	for {
 		p = (**C.char)(unsafe.Pointer(q))
 		if *p == nil {
@@ -1205,7 +1206,7 @@ func ProjectionMethods() []string {
 		}
 		strings = append(strings, C.GoString(*p))
 		q += unsafe.Sizeof(q)
-	}
+	}*/
 
 	return strings
 }
@@ -1217,12 +1218,12 @@ func ParameterList(method string) (params []string, name string) {
 
 	var cName *C.char
 
-	p := C.OPTGetParameterList(cMethod, &cName)
+	//p := C.OPTGetParameterList(cMethod, &cName)
 
 	name = C.GoString(cName)
 
 	var strings []string
-	q := uintptr(unsafe.Pointer(p))
+	/*q := uintptr(unsafe.Pointer(p))
 	for {
 		p = (**C.char)(unsafe.Pointer(q))
 		if *p == nil {
@@ -1230,7 +1231,7 @@ func ParameterList(method string) (params []string, name string) {
 		}
 		strings = append(strings, C.GoString(*p))
 		q += unsafe.Sizeof(q)
-	}
+	}*/
 
 	return strings, name
 }
@@ -1253,11 +1254,11 @@ func ParameterInfo(
 	var cParamType *C.char
 	var cDefaultValue C.double
 
-	success := C.OPTGetParameterInfo(
-		cMethod,
-		cName,
-		&cUserName,
-		&cParamType,
-		&cDefaultValue)
-	return C.GoString(cUserName), C.GoString(cParamType), float64(cDefaultValue), success != 0
+	/*success := C.OPTGetParameterInfo(
+	cMethod,
+	cName,
+	&cUserName,
+	&cParamType,
+	&cDefaultValue)*/
+	return C.GoString(cUserName), C.GoString(cParamType), float64(cDefaultValue), false //success != 0
 }
